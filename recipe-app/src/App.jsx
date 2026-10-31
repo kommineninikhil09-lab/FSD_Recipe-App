@@ -6,6 +6,7 @@ import RecipeList from './components/RecipeList'
 import RecipeDetail from './components/RecipeDetail'
 import AddRecipeForm from './components/AddRecipeForm'
 import NotFound from './components/NotFound'
+import ScrollToTop from './components/ScrollToTop'
 import './App.css'
 
 const STORAGE_KEY = 'recipe-app:custom-recipes'
@@ -37,6 +38,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Header />
       <main className="container">
         <Routes>
@@ -47,7 +49,7 @@ function App() {
         </Routes>
       </main>
       <footer className="footer">
-        Recipe Book · Built with React &amp; GitHub Copilot
+        Recipe Book · Built with React
       </footer>
     </BrowserRouter>
   )

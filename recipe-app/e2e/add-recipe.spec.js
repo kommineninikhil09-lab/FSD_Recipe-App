@@ -49,6 +49,16 @@ test.describe('Add recipe', () => {
     await expect(page.getByText('Add at least one ingredient.')).toBeVisible()
   })
 
+  test('hides a field error as soon as the user edits that field (regression)', async ({ page }) => {
+    await page.getByRole('button', { name: 'Save recipe' }).click()
+    await expect(page.getByText('Please give the recipe a name.')).toBeVisible()
+
+    await page.getByLabel('Recipe name').fill('Pasta')
+    await expect(page.getByText('Please give the recipe a name.')).toBeHidden()
+    // Other fields keep their errors until they are edited.
+    await expect(page.getByText('Please enter a cuisine.')).toBeVisible()
+  })
+
   test('clears errors once the form is fixed and saves the recipe', async ({ page }) => {
     await page.getByRole('button', { name: 'Save recipe' }).click()
     await expect(page.locator('.field-error')).toHaveCount(6)
@@ -68,6 +78,13 @@ test.describe('Add recipe', () => {
     await expect(page.locator('.ingredients li')).toHaveText(['300 g shrimp', '3 tbsp butter', '4 cloves garlic'])
     await expect(page.locator('.instructions li')).toHaveCount(2)
     await expect(page.locator('.tags .tag')).toHaveText(['#seafood', '#quick'])
+  })
+
+  test('opens the new recipe scrolled to the top (regression)', async ({ page }) => {
+    await fillValidRecipe(page)
+    await page.getByRole('button', { name: 'Save recipe' }).click()
+    await expect(page).toHaveURL(/\/recipes\/13$/)
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
   })
 
   test('new recipe appears in the list, is searchable and survives a reload', async ({ page }) => {

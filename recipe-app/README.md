@@ -18,6 +18,17 @@ npm install
 npm run dev      # start the dev server
 npm run build    # production build into dist/
 npm run lint     # lint with oxlint
+npm run test:e2e # end-to-end tests (Playwright, uses installed Google Chrome)
+```
+
+## Testing
+
+42 end-to-end Playwright tests in `e2e/` cover the recipe list, search, the category filter, the detail page, adding recipes (including validation and persistence), not-found pages, and the layout on desktop and mobile. After a run, open the HTML report with `npx playwright show-report`.
+
+`scripts/capture-screenshots.mjs` captures screenshots of every feature from a running dev server:
+
+```bash
+node scripts/capture-screenshots.mjs http://localhost:5173 ../submission/screenshots
 ```
 
 ## Project structure
@@ -36,7 +47,10 @@ src/
     ├── RecipeCard.jsx          # Card shown in the grid
     ├── RecipeDetail.jsx        # Recipe detail component
     ├── AddRecipeForm.jsx       # Form to add more recipes
-    └── NotFound.jsx            # 404 / missing recipe
+    ├── NotFound.jsx            # 404 / missing recipe
+    └── ScrollToTop.jsx         # Resets scroll position on page change
+e2e/                            # Playwright end-to-end tests
+scripts/capture-screenshots.mjs # Screenshot capture for the submission
 ```
 
 ## Routes
@@ -49,4 +63,4 @@ src/
 
 ## Tech stack
 
-React 19 · React Router 7 · Vite · oxlint. Project scaffolded with `npx create-vite@latest recipe-app --template react`.
+React 19 · React Router 7 · Vite · oxlint · Playwright. Project scaffolded with `npx create-vite@latest recipe-app --template react`.

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Recipe App — Project Writeup</title>
+<base href="file:///C:/Simplilearn/Recipe%20App/submission/screenshots/">
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; color: #2b2118; font-size: 10.5pt; line-height: 1.5; }
+  h1 { font-size: 22pt; margin: 0 0 4px; line-height: 1.2; }
+  h2 { font-size: 14pt; color: #b8401c; border-bottom: 2px solid #fbe9df; padding-bottom: 4px; margin: 22px 0 8px; break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 14px 0 4px; break-after: avoid; }
+  p { margin: 0 0 8px; }
+  ul, ol { margin: 0 0 8px; padding-left: 22px; }
+  li { margin-bottom: 2px; }
+  .meta { color: #7a6a5c; margin-bottom: 14px; }
+  .meta td { padding: 1px 14px 1px 0; border: none; }
+  table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; break-inside: avoid; }
+  th, td { border: 1px solid #ecdfd2; padding: 5px 8px; text-align: left; vertical-align: top; }
+  th { background: #fbe9df; }
+  td code { white-space: nowrap; }
+  h2.result { break-before: page; }
+  code { font-family: Consolas, monospace; font-size: 9.5pt; background: #f6efe8; padding: 1px 4px; border-radius: 3px; }
+  pre { font-family: Consolas, monospace; font-size: 8.8pt; background: #f6efe8; border: 1px solid #ecdfd2; border-radius: 6px; padding: 8px 10px; white-space: pre-wrap; margin: 4px 0 10px; }
+  figure { margin: 8px 0 12px; break-inside: avoid; text-align: center; }
+  figure img { max-width: 100%; max-height: 105mm; border: 1px solid #ecdfd2; border-radius: 6px; }
+  figcaption { font-size: 9pt; color: #5a4a3d; margin-top: 4px; }
+  .page-break { break-before: page; }
+  .ok { color: #2e7d32; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>Developing a Recipe App Using Gen AI-Assisted Code Generation</h1>
+<table class="meta">
+  <tr><td><b>Project</b></td><td>Course-end Project 2 — "Recipe Book" React app</td></tr>
+  <tr><td><b>Submitted by</b></td><td>Nikhil Kommineni</td></tr>
+  <tr><td><b>Date</b></td><td>31 October 2026</td></tr>
+  <tr><td><b>Tech stack</b></td><td>React 19, React Router 7, Vite, oxlint, Playwright</td></tr>
+</table>
+
+<h2>1. Overview</h2>
+<p>Recipe Book is a simple, easy-to-use recipe app built with React. People often find recipe sites overwhelming, so this app focuses on the essentials: a clear list of recipes, a detailed card for each recipe, fast search, and a form to add new recipes.</p>
+<p>The app is populated with 12 generated sample recipes from 8 cuisines. All seven project tasks are implemented, and the app is checked by 42 automated end-to-end tests, all of which pass.</p>
+
+<figure>
+  <img src="01-recipe-list.png" style="max-height:95mm">
+  <figcaption>Figure 1 — The recipe list page.</figcaption>
+</figure>
+
+<h2>2. Features</h2>
+<ul>
+  <li><b>Recipe list</b> — every recipe as a card showing category, title, description, total time, servings and cuisine.</li>
+  <li><b>Recipe detail</b> — a detail card with prep, cook and total time, servings, difficulty, ingredients, numbered steps and tags.</li>
+  <li><b>Search</b> — searches titles, descriptions, cuisines, categories, tags and ingredients, with a category filter. Clicking a tag on a recipe searches for that tag.</li>
+  <li><b>Add recipes</b> — a form with validation. New recipes are saved in the browser (localStorage) and survive a refresh.</li>
+  <li><b>Responsive</b> — works on desktop and mobile screens.</li>
+</ul>
+
+<h2>3. Implementation by task</h2>
+
+<h3>Task 1 — Set up the project</h3>
+<p>The project was created with <code>npx</code> using Vite's React template, and React Router was added for page navigation:</p>
+<pre>npx create-vite@latest recipe-app --template react
+cd recipe-app
+npm install
+npm install react-router-dom
+npm run dev</pre>
+<p>Vite's boilerplate (logos, demo counter) was removed. The app has three routes:</p>
+<table>
+  <tr><th>Path</th><th>Page</th><th>Component</th></tr>
+  <tr><td><code>/</code></td><td>All recipes with search</td><td><code>RecipeList</code></td></tr>
+  <tr><td><code>/recipes/:id</code></td><td>Recipe detail</td><td><code>RecipeDetail</code></td></tr>
+  <tr><td><code>/add</code></td><td>Add a new recipe</td><td><code>AddRecipeForm</code></td></tr>
+  <tr><td>any other path</td><td>Not found</td><td><code>NotFound</code></td></tr>
+</table>
+
+<h3>Task 2 — Create a basic UI</h3>
+<p><code>Header.jsx</code> provides the logo and navigation ("All Recipes", "+ Add Recipe"), with the current page highlighted. <code>App.jsx</code> wraps the pages in a centred container with a footer. Styling lives in <code>index.css</code> (theme colours as CSS variables) and <code>App.css</code> (layout, cards and forms), with breakpoints at 700px and 480px for small screens.</p>
+
+<h3>Task 3 — Create sample data</h3>
+<p><code>src/data/recipes.js</code> exports 12 generated recipes covering Italian, Indian, American, Thai, Greek, Mexican, Japanese and Chinese cuisine, across six categories (Breakfast, Main Course, Salad, Soup, Dessert, Drink). Each recipe uses the same shape:</p>
+<pre>{
+  id: 1,
+  title: 'Classic Margherita Pizza',
+  emoji: '🍕',
+  cuisine: 'Italian',
+  category: 'Main Course',
+  difficulty: 'Medium',
+  prepTime: 20, cookTime: 15, servings: 4,
+  description: 'A simple Neapolitan-style pizza with tangy tomato sauce...',
+  ingredients: ['500 g pizza dough', '200 g crushed San Marzano tomatoes', ...],
+  instructions: ['Preheat the oven to its highest setting...', ...],
+  tags: ['vegetarian', 'baked', 'cheese'],
+}</pre>
+
+<h3>Task 4 — Display recipes in the UI</h3>
+<p><code>RecipeList.jsx</code> renders a grid of <code>RecipeCard</code> components. Each card is a link to its detail page and shows the total time, calculated as <code>prepTime + cookTime</code>. The grid uses <code>repeat(auto-fill, minmax(250px, 1fr))</code>, so the number of columns adjusts to the screen width.</p>
+
+<h3>Task 5 — Add more recipes</h3>
+<p><code>App.jsx</code> combines the sample recipes with recipes the user adds. User recipes are saved to localStorage, so they persist between visits:</p>
+<pre>const [customRecipes, setCustomRecipes] = useState(loadCustomRecipes)
+
+useEffect(() => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(customRecipes))
+}, [customRecipes])
+
+const addRecipe = (recipe) => {
+  const nextId = Math.max(...recipes.map((r) => r.id)) + 1
+  const newRecipe = { ...recipe, id: nextId }
+  setCustomRecipes((prev) => [...prev, newRecipe])
+  return newRecipe
+}</pre>
+<p><code>AddRecipeForm.jsx</code> collects every field. Ingredients and instructions are entered one per line, and tags are comma separated. The form checks that the name, cuisine, description, at least one ingredient, at least one step, and servings of 1 or more are provided. Each error appears under its field and disappears as soon as that field is edited. After saving, the app opens the new recipe's detail page. If the saved data is ever corrupted, the app ignores it instead of crashing.</p>
+
+<h3>Task 6 — Recipe detail card</h3>
+<p><code>RecipeDetail.jsx</code> reads the recipe id from the URL with <code>useParams</code> and shows a card with category and cuisine badges, the description, a stats row (prep, cook, total time, servings, difficulty), an ingredient checklist, numbered instructions, and tags. Each tag links to a search for that tag. The "Back to recipes" button returns to the previous page with the search kept, or to the list if the page was opened directly. Unknown ids show a "Not found" message.</p>
+
+<figure>
+  <img src="07-recipe-detail.png" style="max-height:110mm">
+  <figcaption>Figure 2 — The recipe detail card.</figcaption>
+</figure>
+
+<h3>Task 7 — Search</h3>
+<p><code>SearchBar.jsx</code> provides a search box and a category dropdown. A recipe matches when every word of the query appears somewhere in its text, ignoring capitals:</p>
+<pre>function matchesQuery(recipe, query) {
+  const haystack = [recipe.title, recipe.description, recipe.cuisine,
+    recipe.category, ...recipe.tags, ...recipe.ingredients].join(' ').toLowerCase()
+
+  return query.toLowerCase().split(/\s+/).filter(Boolean)
+    .every((word) => haystack.includes(word))
+}</pre>
+<p>So "chicken noodles" finds only Chicken Pad Thai, and "feta" finds the Greek Salad through its ingredients. The query and category are also stored in the URL (for example <code>/?q=chicken&amp;category=Main%20Course</code>), so a search can be shared and is kept when returning from a recipe. When nothing matches, the app shows a message with a "Clear search" button.</p>
+
+<h2>4. Project structure</h2>
+<pre>recipe-app/
+├── src/
+│   ├── App.jsx                 routes and recipe state (sample + user-added)
+│   ├── App.css, index.css      styles and theme
+│   ├── data/recipes.js         sample recipe data
+│   └── components/
+│       ├── Header.jsx          top navigation
+│       ├── RecipeList.jsx      list page with search and filter
+│       ├── SearchBar.jsx       search box and category select
+│       ├── RecipeCard.jsx      card in the grid
+│       ├── RecipeDetail.jsx    recipe detail component
+│       ├── AddRecipeForm.jsx   form to add recipes
+│       ├── NotFound.jsx        missing recipe / unknown page
+│       └── ScrollToTop.jsx     resets scroll on page change
+├── e2e/                        Playwright end-to-end tests
+└── scripts/capture-screenshots.mjs</pre>
+
+<h2>5. Testing</h2>
+<p>The app is tested with 42 automated Playwright end-to-end tests that drive a real Google Chrome browser, at both desktop size and a mobile size (Pixel 7). <span class="ok">All 42 tests pass.</span> Lint (oxlint) and the production build also pass with no errors.</p>
+<table>
+  <tr><th>Test file</th><th>Tests</th><th>What is covered</th></tr>
+  <tr><td><code>recipe-list.spec.js</code></td><td>4</td><td>All 12 recipes and card details shown; clicking a card opens the recipe; navigation links</td></tr>
+  <tr><td><code>search.spec.js</code></td><td>13</td><td>Search by title, ingredient, cuisine and tag; capitals ignored; multi-word queries; category filter alone and with text; empty results and clear; search from the URL; search kept after going back; fast typing</td></tr>
+  <tr><td><code>recipe-detail.spec.js</code></td><td>6</td><td>All fields correct; all 12 recipes open; tag links search; back button; not-found pages</td></tr>
+  <tr><td><code>add-recipe.spec.js</code></td><td>9</td><td>Validation messages; blank and invalid input rejected; errors clear while typing; saved recipe correct, listed, searchable and kept after reload; unique ids; cancel; corrupted saved data; page opens at the top</td></tr>
+  <tr><td><code>responsive.spec.js</code></td><td>5 × 2</td><td>No sideways scrolling, header on one line, search and form usable, no console errors — on desktop and mobile</td></tr>
+</table>
+<p>To confirm the tests really detect bugs, the multi-word search was deliberately broken; 3 search tests failed as expected, and passed again once the code was restored.</p>
+
+<h3>Bugs found and fixed during testing</h3>
+<table>
+  <tr><th>Bug</th><th>Cause</th><th>Fix</th></tr>
+  <tr><td>Typing quickly in the search box dropped letters</td><td>The input value was read back from the URL, which updates a moment later</td><td>Keep the text in component state and copy it to the URL afterwards</td></tr>
+  <tr><td>A newly saved recipe opened scrolled halfway down</td><td>The scroll position was kept when changing pages</td><td>Added <code>ScrollToTop</code>, which scrolls up on every page change</td></tr>
+  <tr><td>Error messages stayed after the field was fixed</td><td>Errors were only re-checked on submit</td><td>Remove a field's error as soon as it is edited</td></tr>
+  <tr><td>Header wrapped onto two lines on phones</td><td>Logo and links were too wide for small screens</td><td>Smaller header text and spacing below 480px</td></tr>
+</table>
+<p>Each fix has its own test, so the bug can't come back unnoticed.</p>
+
+<h2>6. Use of generative AI</h2>
+<p>This project was developed with AI-assisted code generation. An AI coding assistant (Claude Code) was used to scaffold the project, generate the sample recipe data, write the React components and styles, write the end-to-end tests, and find and fix the bugs listed above. Every generated piece was reviewed and verified by running the app and the test suite.</p>
+
+<h2>7. How to run</h2>
+<pre>cd recipe-app
+npm install
+npm run dev        # start the app, then open the printed localhost URL
+npm run build      # production build
+npm run test:e2e   # run the 42 end-to-end tests</pre>
+
+<h2 class="result">8. Result</h2>
+<p>The result is a simple, user-friendly recipe app that meets every requirement of the project. The table below maps each rubric criterion to where it is implemented.</p>
+<table>
+  <tr><th>Rubric criterion</th><th>Implementation</th><th>Status</th></tr>
+  <tr><td>Project setup</td><td>Created with <code>npx create-vite</code>; React Router added</td><td class="ok">Complete</td></tr>
+  <tr><td>UI generation</td><td><code>Header</code>, layout and styles</td><td class="ok">Complete</td></tr>
+  <tr><td>Sample data generation</td><td>12 generated recipes in <code>data/recipes.js</code></td><td class="ok">Complete</td></tr>
+  <tr><td>Recipe display</td><td><code>RecipeList</code> + <code>RecipeCard</code></td><td class="ok">Complete</td></tr>
+  <tr><td>Recipe detail component</td><td><code>RecipeDetail</code></td><td class="ok">Complete</td></tr>
+  <tr><td>Search functionality</td><td><code>SearchBar</code> + filtering in <code>RecipeList</code></td><td class="ok">Complete</td></tr>
+  <tr><td>Add more recipes (task 5)</td><td><code>AddRecipeForm</code> + localStorage</td><td class="ok">Complete</td></tr>
+</table>
+<p>Screenshots of every feature are provided in the separate Screenshots file, and the full source code is in the Source Code archive.</p>
+
+</body>
+</html>

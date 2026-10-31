@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Recipe App — Screenshots</title>
+<base href="file:///C:/Simplilearn/Recipe%20App/submission/screenshots/">
+<style>
+  @page { size: A4; margin: 16mm 14mm; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; color: #2b2118; font-size: 10.5pt; line-height: 1.45; }
+  h1 { font-size: 22pt; margin: 0 0 4px; }
+  .subtitle { color: #7a6a5c; margin: 0 0 18px; }
+  h2 { font-size: 14pt; color: #b8401c; border-bottom: 2px solid #fbe9df; padding-bottom: 4px; margin: 0 0 10px; }
+  .section { break-before: page; }
+  figure { margin: 0 0 18px; break-inside: avoid; }
+  figure img { display: block; max-width: 100%; max-height: 225mm; margin: 0 auto; border: 1px solid #ecdfd2; border-radius: 6px; }
+  figure.tall img { max-height: 235mm; }
+  figure.phone img { max-width: 48%; display: inline-block; vertical-align: top; margin: 0 1%; }
+  figcaption { margin-top: 6px; font-size: 9.5pt; color: #5a4a3d; }
+  figcaption b { color: #2b2118; }
+  table { border-collapse: collapse; width: 100%; margin-top: 8px; }
+  th, td { border: 1px solid #ecdfd2; padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #fbe9df; }
+</style>
+</head>
+<body>
+
+<h1>Recipe Book — Screenshots</h1>
+<p class="subtitle">Course-end Project 2 · Developing a Recipe App Using Gen AI-Assisted Code Generation · 31 October 2026</p>
+
+<table>
+  <tr><th>Rubric criterion</th><th>Figures</th></tr>
+  <tr><td>UI generation</td><td>1, 2</td></tr>
+  <tr><td>Sample data / recipe display</td><td>1, 2</td></tr>
+  <tr><td>Search functionality</td><td>3, 4, 5, 6</td></tr>
+  <tr><td>Recipe detail component</td><td>7, 13</td></tr>
+  <tr><td>Adding more recipes</td><td>8, 9, 10, 11, 12</td></tr>
+  <tr><td>Responsive layout</td><td>14, 15</td></tr>
+  <tr><td>End-to-end testing</td><td>16</td></tr>
+</table>
+
+<div class="section">
+  <h2>Recipe list (UI, sample data, recipe display)</h2>
+  <figure class="tall">
+    <img src="01-recipe-list.png">
+    <figcaption><b>Figure 1 — Recipe list page.</b> All 12 sample recipes are shown as cards in a responsive grid, with a header, the search bar and a result count.</figcaption>
+  </figure>
+</div>
+
+<div class="section">
+  <figure>
+    <img src="02-recipe-card.png" style="max-width:45%">
+    <figcaption><b>Figure 2 — Recipe card.</b> Each card shows the category badge, title, a short description, total time (prep + cook), servings and cuisine. Clicking it opens the detail page.</figcaption>
+  </figure>
+</div>
+
+<div class="section">
+  <h2>Search functionality</h2>
+  <figure>
+    <img src="03-search-chicken.png">
+    <figcaption><b>Figure 3 — Search by keyword.</b> Searching "chicken" returns the 2 matching recipes. The search covers titles, descriptions, cuisines, categories, tags and ingredients.</figcaption>
+  </figure>
+  <figure>
+    <img src="04-category-filter-breakfast.png">
+    <figcaption><b>Figure 4 — Category filter.</b> Selecting "Breakfast" shows only breakfast recipes.</figcaption>
+  </figure>
+</div>
+
+<div class="section">
+  <figure>
+    <img src="05-search-and-filter-combined.png">
+    <figcaption><b>Figure 5 — Search plus filter.</b> "vegetarian" combined with the "Main Course" category returns 2 recipes. The search is stored in the URL, so it can be shared and survives going back.</figcaption>
+  </figure>
+  <figure>
+    <img src="06-search-no-results.png">
+    <figcaption><b>Figure 6 — No results.</b> A search with no matches shows a friendly message and a "Clear search" button.</figcaption>
+  </figure>
+</div>
+
+<div class="section">
+  <h2>Recipe detail component</h2>
+  <figure class="tall">
+    <img src="07-recipe-detail.png">
+    <figcaption><b>Figure 7 — Recipe detail card.</b> Category and cuisine badges, description, prep/cook/total time, servings, difficulty, the ingredient checklist, numbered instructions and clickable tags.</figcaption>
+  </figure>
+</div>
+
+<div class="section">
+  <h2>Adding more recipes</h2>
+  <figure class="tall">
+    <img src="08-add-recipe-form.png">
+    <figcaption><b>Figure 8 — Add recipe form.</b> Fields for every part of a recipe. Ingredients and instructions take one item per line; tags are comma separated.</figcaption>
+  </figure>
+</div>
+
+<div class="section">
+  <figure class="tall">
+    <img src="09-add-recipe-validation.png">
+    <figcaption><b>Figure 9 — Validation.</b> Submitting an empty form shows an error under each required field. An error disappears as soon as that field is edited.</figcaption>
+  </figure>
+</div>
+
+<div class="section">
+  <figure class="tall">
+    <img src="10-add-recipe-filled.png">
+    <figcaption><b>Figure 10 — Completed form.</b> A new "Garlic Butter Shrimp" recipe, ready to save.</figcaption>
+  </figure>
+</div>
+
+<div class="section">
+  <figure>
+    <img src="11-new-recipe-detail.png">
+    <figcaption><b>Figure 11 — Saved recipe.</b> After saving, the app opens the new recipe's detail page. Recipes are kept in localStorage, so they survive a page refresh.</figcaption>
+  </figure>
+  <figure>
+    <img src="12-new-recipe-in-search.png">
+    <figcaption><b>Figure 12 — New recipe is searchable.</b> The added recipe appears in the list and in search results.</figcaption>
+  </figure>
+</div>
+
+<div class="section">
+  <figure>
+    <img src="13-recipe-not-found.png">
+    <figcaption><b>Figure 13 — Not found.</b> Opening a recipe that does not exist shows a clear message with a link back to all recipes.</figcaption>
+  </figure>
+  <h2>Responsive layout</h2>
+  <figure class="phone">
+    <img src="14-mobile-list.png"><img src="15-mobile-detail.png">
+    <figcaption><b>Figures 14 and 15 — Mobile (Pixel 7).</b> The list and detail pages adapt to a phone screen: cards stack, the detail columns stack, and the header stays on one line.</figcaption>
+  </figure>
+</div>
+
+<div class="section">
+  <h2>End-to-end testing</h2>
+  <figure class="tall">
+    <img src="16-e2e-test-report.png">
+    <figcaption><b>Figure 16 — Playwright test report.</b> All 42 end-to-end tests pass in Google Chrome on desktop and mobile. They cover the list, search, filters, detail page, adding recipes, validation, not-found pages and layout.</figcaption>
+  </figure>
+</div>
+
+</body>
+</html>

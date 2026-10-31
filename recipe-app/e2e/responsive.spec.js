@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+﻿import { expect, test } from '@playwright/test'
 
 // Runs in both the desktop and the mobile (Pixel 7) projects.
 
@@ -8,6 +8,18 @@ test('list page has no horizontal scrolling', async ({ page }) => {
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   )
   expect(overflow).toBeLessThanOrEqual(0)
+})
+
+test('header fits on one line (regression)', async ({ page }) => {
+  await page.goto('/')
+  const header = await page.locator('.header-inner').boundingBox()
+  const logo = await page.locator('.logo').boundingBox()
+  const addLink = await page.getByRole('link', { name: '+ Add Recipe' }).boundingBox()
+
+  // Logo and nav links stay on a single row inside the 64px header.
+  expect(logo.height).toBeLessThan(48)
+  expect(addLink.height).toBeLessThan(48)
+  expect(addLink.y + addLink.height).toBeLessThanOrEqual(header.y + header.height)
 })
 
 test('detail page is readable and has no horizontal scrolling', async ({ page }) => {

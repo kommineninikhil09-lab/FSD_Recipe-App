@@ -478,6 +478,23 @@ main.container {
 }
 
 /* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1.05rem;
+    white-space: nowrap;
+  }
+
+  .nav {
+    gap: 4px;
+  }
+
+  .nav a {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+}
+
 @media (max-width: 700px) {
   .detail-header {
     flex-direction: column;

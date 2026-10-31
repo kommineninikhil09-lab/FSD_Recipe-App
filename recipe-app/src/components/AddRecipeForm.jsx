@@ -45,6 +45,10 @@ function AddRecipeForm({ onAdd }) {
   const handleChange = (e) => {
     const { name, value } = e.target
     setForm((prev) => ({ ...prev, [name]: value }))
+    // Hide a field's error as soon as the user starts fixing it.
+    if (errors[name]) {
+      setErrors(({ [name]: _removed, ...rest }) => rest)
+    }
   }
 
   const handleSubmit = (e) => {
